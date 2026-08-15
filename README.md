@@ -250,7 +250,7 @@ void bar() {
 template <typename T>
 struct linked_list<T> {
     T value;
-    linked_list* next;
+    linked_list<T>* next;
 }
 
 linked_list<int> list1 = {1, nullptr}
