@@ -130,7 +130,7 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 
 &emsp;For example, if a pointer is passed to a function it should be checked if it is a `nullptr` before any operations are done on it. If a value for a function takes an index of a list object to return the value at that index, it should be checked to make sure the passed index is withing the list's bounds.
 
-`if (index < 0 || list.size() <= index) throw std::out_of_range("Index out of range.");`
+&emsp;`if (index < 0 || list.size() <= index) throw std::out_of_range("Index out of range.");`
 
 #### 4. Check Every Return Value
 
@@ -244,7 +244,9 @@ void bar() {
 
 #### 3. Apply Upper Bounds to Loops
 
-&emsp;Unless a loop is intentionally continuously looped through, like an update loop, there should be a strict upper bounds to the loop to prevent a runaway inescapable loop.
+&emsp;Unless a loop is intentionally continuously looped through indefinitely, like an update loop, there should be a strict upper bounds on the loop to prevent a runaway, inescapable loop.
+
+&emsp;Circular linked list:
 
 ```cpp
 template <typename T>
@@ -263,7 +265,7 @@ list1.next = &list2;
 
 ```cpp
 template <typename T>
-linked_list<T>* findEnd(linked_list<T>* list) {
+linked_list<T>* end(linked_list<T>* list) {
     while (list.next != nullptr) {
         list = list->next;
     }
@@ -275,7 +277,7 @@ linked_list<T>* findEnd(linked_list<T>* list) {
 
 ```cpp
 template <typename T>
-linked_list<T>* findEnd(linked_list<T>* list) {
+linked_list<T>* end(linked_list<T>* list) {
     const static int MAX_ITERATIONS = 65536;
 
     int iterations = 0;
