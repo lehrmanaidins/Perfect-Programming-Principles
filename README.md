@@ -10,7 +10,6 @@ While these principles are written for specifically critical and safe C++ code, 
 
 ## Discouraged Practices
 
-
 ### Naming
 > "There are only two hard things in Computer Science: cache invalidation and naming things" - Phil Karlton
 
@@ -35,23 +34,28 @@ While these principles are written for specifically critical and safe C++ code, 
 
 ### Types
 
-#### 1. Type Names Should Be Descriptive
-&emsp;I see a lot of variables where the type and the name of the variable are seen as two separate "ideas". \
+#### 1. Types Should Be Descriptive
+&emsp;I see a lot of variables where the type of a variable and the name of the variable are seen as two separate "ideas". \
 Like in [&sect;Naming-2](#2-be-descriptive-in-your-name), your data type should also be as descriptive as possible. i.e: 
 
 &emsp;```int number_of_vowels_in_string = 0``` <-- `int` is an ok data type here, but could be better. \
 &emsp;```std::size_t number_of_vowels_in_string = 0``` <-- This is a slightly better data type.
 
 &emsp;```using counter_t = std::size_t;``` \
-&emsp;```counter_t number_of_vowels_in_string = 0``` <-- Clearly states that `number_of_vowels_in_string` is a counter (`counter_t`).
+&emsp;```counter_t number_of_vowels_in_string = 0``` <-- Clearly states that `number_of_vowels_in_string` is a counter (`counter_t`) and implies that it is meant to be iteratively incremented or some similar operation.
+
+&emsp; Note: aliased types are not strongly typed in C++; for example, a function accepting an aliased `int` called `counter` will accept both a `counter` and an `int` as an argument.
 
 #### 2. Declare Const by Default
 &emsp;Every variable that is initialized should be defined as a `const`. If a variable is not defined as `const`, then it is assumed that the variable value will be edited during runtime. 
 
+&emsp;```int variable_name = 1;``` <-- Even if its "obvious" that this variable is not changed in the code, when I see this I assume that it is updated somewhere in the code that I haven't seen yet. \
 &emsp;```const int variable_name = 1;``` <-- It is clear that this variable will not be changed during program execution.
 
-#### 3. Avoid Unsafe Data Types
-&emsp;In C++, raw pointers cause many issues such as memory leaks. Use smart pointers like `std::unique_ptr` and `std::shared_ptr` for every use of a pointer. Do not use raw pointers. 
+#### 3. Avoid Unobvious Data Types
+
+#### 4. Avoid Unsafe Data Types
+&emsp;In C++, raw pointers cause many issues. Use smart pointers like `std::unique_ptr` and `std::shared_ptr` for every use of a pointer. Do not use raw pointers. 
 
 &emsp;Smart pointers should also be used for any object that needs to be 'cleaned up' when it goes out of scope:
 
@@ -74,3 +78,21 @@ Like in [&sect;Naming-2](#2-be-descriptive-in-your-name), your data type should 
 
 &emsp;```void createFile(const std::string& file_path);``` <-- Separate functions\
 &emsp;```void writeToFile(const std::string& contents);``` <-- ^
+
+#### 3. Check Every Argument
+&emsp;Every single argument to a function should be checked at the start of a function.
+
+&emsp;For example, if a pointer is passed to a function it should be checked if it is a `nullptr` before any operations are done on it. If a value for a `get(int index)` function takes an index of a list object to return the value at that index, it should be checked to make sure the passed index is withing the list's bounds.
+
+#### 4. Check Every Return Value
+&emsp;If a function returns a value, that means that value is important, and should be checked. 
+
+&emsp;A function wither returns nothing (`void`), some status, or a useful object/value. Any non-`void` function's return value should be checked, or if really not important (like return value of `print` or `logging` function who's return value doesn't really matter) it should be casted to void using `(void)`
+
+&emsp;To guarantee a function's return value is not ignored, the `[[nodiscard]]` tag should be applied to the function; this ensures that a return value is either captured or casted to `void`.
+
+&emsp;```[[nodiscard]] int importantReturnValue();``` <-- Ensures return value of this function is captured or casted to void.
+
+&emsp;```int x = importantReturnValue();``` <-- Ok \
+&emsp;```(void) importantReturnValue();``` <-- Ok \
+&emsp;```importantReturnValue();``` <-- Compiler warning.
