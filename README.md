@@ -1,10 +1,12 @@
 
 # Perfect Programming Principles
 
-These programming principles are written very strict and should be considered the absolute strictest standard when it comes to writing clean and safe code.
+&emsp;These programming principles are written very strict and should be considered the absolute strictest standard when it comes to writing clean and safe code.
 These principles should be considered, but not necessarily followed 100% of the time.
 
-While these principles are written specifically for critical and safe C++ code, they can still be considered and applied to other languages and uses as well.
+&emsp;While these principles are written specifically for critical and safe C++ code, they can still be considered and applied to other languages and uses as well.
+
+&emsp;All of the following principles should be considered at the same time when writing code; however, in the example code given in this document, the current principle or practice might be the only one followed to produce easier to follow examples with the least amount of filler code to distract from the highlighted principle or practice.
 
 ## Table of Contents
 - [Variables](#variables)
