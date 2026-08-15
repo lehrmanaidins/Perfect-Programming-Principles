@@ -58,7 +58,7 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 #### 3. Avoid Floating-Point Data Types
 &emsp;Floating-point values have issues with their precision and can lead to unexpected results.
 
-&emsp;See the classic floating-point example where `1.0 + 2.0 != 3.0`.
+&emsp;See the classic floating-point example of `0.1 + 0.2 != 0.3`, and see other examples [here](https://jvns.ca/blog/2023/01/13/examples-of-floating-point-problems/).
 
 &emsp;If you find yourself using a floating-point value, think of ways that it can be converted to an integer. 99.99% of the time, if a floating-point value is used, it can be replaced with an integer. For example, look at real-world sensors; most real-world sensors have a minimum precision value expressed as an integer type. A processor temperature sensor can only read values of, lets say, 1/1000th of a degree Celsius of precision; therefore, the variable used to store the value should be an integer type of `millidegrees_celsius_t` or something similar. 
 
