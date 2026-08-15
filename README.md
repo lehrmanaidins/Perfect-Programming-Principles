@@ -4,28 +4,25 @@
 These programming principles are written very strict and should be considered the absolute strictest standard when it comes to writing clean and safe code.
 These principles should be considered, but not necessarily followed 100% of the time.
 
-While these principles are written for specifically critical and safe C++ code, they can still be considered and applied to other languages and uses as well.
+While these principles are written specifically for critical and safe C++ code, they can still be considered and applied to other languages and uses as well.
 
 ---
 
 ## Discouraged Practices
 
 ### Variables
-> "There are only two hard things in Computer Science: cache invalidation and naming things" - Phil Karlton
-
-&emsp;Naming is one of the most difficult things in programming, but following some simple rules makes it easier.
 
 #### 1. Do Not Abbreviate
 &emsp;Early programmers tended to name variables as single letters or would heavily abbreviate their variable names.
 
 &emsp;`p, n, creat, strncpy, ...`
 
-&emsp;Really the only variables you can get away with single letter variable names are very simple values (`a, b, c, x, y, z`) that are obvious or not important or historically single letter variables like `i` in loops.
+&emsp;Really the only variables you can get away with single letter variable names are very simple values (`a, b, c, x, y, z`) that are obvious, not important, or historically single letter variables like `i` in loops.
 
-&emsp;`struct vector3 {int x, y, z;};` <-- These variable names are fine because it is obvious what they represent.
+&emsp;`struct vector3 {int x, y, z;};` <-- These variable names are fine because it is obvious what they represent. \
 &emsp;`int exampleFunction(int a);` <-- Parameter `a` is not ok here because it is not obvious what `a` represents.
 
-&emsp;Early programmers heavily shortened their variable names because a lot of them were mathematicians and math loves single letter variables; additionally, screens in the early days of computing were only 80 characters wide and punch cards were also only 80 characters wide, but in today's day of age with 4K resolution wide screens and with very large amounts of memory, we do not need to shorten names.
+&emsp;Early programmers heavily shortened their variable names because a lot of them were mathematicians and math loves single letter variables; additionally, screens in the early days of computing were only 80 characters wide and punch cards were also only 80 characters wide, but in today's day of age of wide screens and what seems like infinite memory, we do not need to shorten names.
 
 #### 2. Use Descriptive Variable Names
 &emsp;A variable name should be very descriptive as to what it is; there should be no ambiguity as to what a variable represents. 
@@ -38,7 +35,7 @@ While these principles are written for specifically critical and safe C++ code, 
 ### Data Types
 
 #### 1. Data Types Should Be Descriptive
-&emsp;There are countless examples where the variable name stores all information relating to the variable, including the name, unit, etc., and the data type is a primitive data type:
+&emsp;There are countless examples where a variable name stores all information relating to the variable, including the name, unit, etc., while the data type is a primitive type:
 
 &emsp;`int led_blink_time_period_seconds;`
 
@@ -59,20 +56,16 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 &emsp;`const int variable_name = 1;` <-- It is clear that this variable will not be changed during program execution.
 
 #### 3. Avoid Floating-Point Data Types
-&emsp;If you find yourself using a floating-point value, think of ways that it can be converted to an integer. 99.99% of the time, if a floating-point value is used, it can be replaced with an integer. For example, look at real-world sensors; most real-world sensors have a minimum precision value expressed as an integer type. A processor temperature sensor can only read values of, lets say, 1/1000th of a degree Celsius of precision; therefore, the variable used to store the value should be an integer type of `millidegrees_celsius_t` or something similar. 
-
-&emsp;`using millidegrees_celsius_t = uint32_t;`
-
 &emsp;Floating-point values have issues with their precision and can lead to unexpected results.
 
 &emsp;See the classic floating-point example where `1.0 + 2.0 != 3.0`.
 
+&emsp;If you find yourself using a floating-point value, think of ways that it can be converted to an integer. 99.99% of the time, if a floating-point value is used, it can be replaced with an integer. For example, look at real-world sensors; most real-world sensors have a minimum precision value expressed as an integer type. A processor temperature sensor can only read values of, lets say, 1/1000th of a degree Celsius of precision; therefore, the variable used to store the value should be an integer type of `millidegrees_celsius_t` or something similar. 
+
+&emsp;`using millidegrees_celsius_t = uint32_t;`
+
 #### 4. Avoid Unsafe Data Types
-&emsp;In C++, raw pointers cause many issues. Use smart pointers like `std::unique_ptr` and `std::shared_ptr` for every use of a pointer. Do not use raw pointers. 
-
-&emsp;Smart pointers should also be used for any object that needs to be 'cleaned up' when it goes out of scope:
-
-&emsp;`std::unique_ptr<FILE, decltype(&std::fclose)> file(std::fopen(file_path, "r"), &std::fclose);` <-- C `FILE` example but still applicable.
+&emsp;One example of an unsafe data type in C++ are raw pointers. To avoid this issue, use smart pointers like `std::unique_ptr` and `std::shared_ptr` for every use of a pointer. Do not use raw pointers. 
 
 #### 5. Create Strong Typed Data Types when Possible
 &emsp;As stated in [&sect;Types-1](#1-types-should-be-descriptive) aliased data type declarations are not strongly typed, so:
@@ -92,9 +85,9 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 &emsp;`meters_t fallDistance(seconds_t time);` <-- Returns the distance an object falls in free fall after how many seconds.
 
 &emsp;`meters_t distance = 100;` \
-&emsp;`seconds_t time = fallDistance(distance);` <-- Incorrect usage, but since `meters_t` and `seconds_t` types are aliased to to the same underlying type, there is no compilation error or warning.
+&emsp;`seconds_t time = fallDistance(distance);` <-- Incorrect usage, but since `meters_t` and `seconds_t` types are aliased to to the same underlying type (`uint32_t`), there is no compilation error or warning.
 
-&emsp;Here we must define a new strong typed data type. It is recommended to either creating your own strong typing framework or using an external library like [strong_type](https://github.com/rollbear/strong_type) or [type_safe](https://github.com/foonathan/type_safe).
+&emsp;Here we should define a new strong typed data type. It is recommended to either creating your own strong typing framework or use an external library like [strong_type](https://github.com/rollbear/strong_type) or [type_safe](https://github.com/foonathan/type_safe).
 
 ---
 
@@ -104,7 +97,7 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 
 &emsp;Similar to [&sect;Variables-2](#2-use-descriptive-variable-names) and [&sect;Data Types-1](#1-data-types-should-be-descriptive), it should be really obvious what a function does solely from the name, its return type, and the arguments passed to it.
 
-&emsp;`bool foobar(const std::string& a);` <-- No clue what this function does. \
+&emsp;`bool foo(const std::string& a);` <-- No clue what this function does. \
 &emsp;`bool doesFileExist(const std::string& file_path);` <-- More obvious
 
 #### 2. Limit Function Scope of Operation
@@ -115,17 +108,19 @@ Like in [&sect;Variables-2](#2-use-descriptive-variable-names), your data type s
 &emsp;`void createFile(const std::string& file_path);` <-- Separate functions\
 &emsp;`void writeToFile(const std::string& contents);` <-- ^
 
+&emsp;Another suggestion I've heard is if you cannot print your entire function on a standard piece of printer paper, in a reasonable font size, then your function is too long.
+
 #### 3. Check Every Argument
 &emsp;Every single argument to a function should be checked at the start of a function.
 
-&emsp;For example, if a pointer is passed to a function it should be checked if it is a `nullptr` before any operations are done on it. If a value for a `get(int index)` function takes an index of a list object to return the value at that index, it should be checked to make sure the passed index is withing the list's bounds.
+&emsp;For example, if a pointer is passed to a function it should be checked if it is a `nullptr` before any operations are done on it. If a value for a function takes an index of a list object to return the value at that index, it should be checked to make sure the passed index is withing the list's bounds.
 
-`if (index < 0 || len(list) <= index) throw std::out_of_range("Index out of range.");`
+`if (index < 0 || list.size() <= index) throw std::out_of_range("Index out of range.");`
 
 #### 4. Check Every Return Value
-&emsp;If a function returns a value, that means that value is important, and should be checked. 
+&emsp;If a function returns a value, that means that value is important, and should be checked.
 
-&emsp;A function wither returns nothing (`void`), some status, or a useful object/value. Any non-`void` function's return value should be checked, or if really not important (like return value of `print` or `logging` function who's return value doesn't really matter) it should be casted to void using `(void)`
+&emsp;A function either returns nothing (`void`), some status, or a useful object/value. Any non-`void` function's return value should be checked, or if really not important (like return value of a `print` or `logging` function who's return value doesn't really matter) it should be casted to void using `(void)` to show that the programmer has at least checked the functions return type and explicitly ignores it.
 
 &emsp;To guarantee a function's return value is not ignored, the `[[nodiscard]]` tag should be applied to the function; this ensures that a return value is either captured or casted to `void`.
 
