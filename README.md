@@ -14,6 +14,7 @@ These principles should be considered, but not necessarily followed 100% of the 
 - [Functions](#functions)
 - [Conditionals](#conditionals)
 - [Control Flow](#control-flow)
+- [Compiler](#compiler)
 
 ---
 
@@ -40,6 +41,10 @@ These principles should be considered, but not necessarily followed 100% of the 
 
 &emsp;`int value;` <-- What does `value` keep track of? \
 &emsp;`int number_of_vowels_in_string;` <-- This is a lot more clear.
+
+#### 3. Declare at Lowest Scope
+
+&emsp;Declare your variables at the minimum possible scope where they are needed.
 
 ---
 
@@ -298,3 +303,11 @@ linked_list<T>* end(linked_list<T>* list) {
 &emsp;The first example code will run forever and will never return, crashing the program; however, the second example code will stop after 65,536 loop iterations (a large but relatively small number), and will return a `nullptr`. Crucially, the second example does not run for an infinite amount of time.
 
 ---
+
+### Compiler
+
+#### 1. Be Pedantic
+
+&emsp;Compiler warnings must be set as errors and the compiler flags should be set to the most pedantic and strict setting available.
+
+&emsp;`-Wall -Wextra -Wpedantic -Werror`
